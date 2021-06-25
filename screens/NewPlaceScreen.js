@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import ImageSelector from "../components/ImageSelector";
+import LocationSelect from "../components/LocationSelector";
 
 import colors from "../constants/colors";
 import * as placesActions from "../store/places-actions";
@@ -16,6 +17,7 @@ import * as placesActions from "../store/places-actions";
 const NewPlaceScreen = (props) => {
   const [titleValue, setTitleValue] = useState("");
   const [selectedImage, setSelectedImage] = useState();
+  const [selectLocation, setSelectLocation] = useState()
 
   const dispatch = useDispatch();
 
@@ -27,8 +29,12 @@ const NewPlaceScreen = (props) => {
     setSelectedImage(imagePath);
   };
 
+  const locationPickedHandler = useCallback((location) => {
+    setSelectLocation(location);
+  }, []);
+
   const savePlaceHandler = () => {
-    dispatch(placesActions.addPlace(titleValue, selectedImage));
+    dispatch(placesActions.addPlace(titleValue, selectedImage, selectLocation));
     props.navigation.goBack();
   };
 
@@ -42,6 +48,10 @@ const NewPlaceScreen = (props) => {
           value={titleValue}
         />
         <ImageSelector onImageTaken={imageTakenHandler} />
+        <LocationSelect
+          navigation={props.navigation}
+          onLocationPicked={locationPickedHandler}
+        />
         <Button
           title="Save Place"
           color={colors.primary}

@@ -29,12 +29,10 @@ const ImageSelector = (props) => {
       aspect: [16, 9],
       quality: 0.5,
     });
-    // console.log('image0', image)
     setSelectedImage(image.uri);
     props.onImageTaken(image.uri)
   };
 
-//   console.log(selectedImage)
 
   return (
     <View style={styles.imageSelector}>
